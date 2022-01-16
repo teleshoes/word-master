@@ -1,7 +1,7 @@
 import { keyboardLetters, status, letters } from '../constants'
 import { useEffect, useCallback } from 'react'
 
-const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, gameDisabled }) => {
+const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, gameDisabled, keyboardLetterWidth, keyboardLetterHeight }) => {
   const getKeyStyle = (letter) => {
     switch (letterStatuses[letter]) {
       case status.green:
@@ -49,13 +49,15 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
   }, [handleKeyDown])
 
   return (
-    <div className="w-full flex flex-col items-center mb-3 select-none">
+    <div className="w-full flex flex-col items-center mb-3 select-none"
+    >
       {keyboardLetters.map((row, idx) => (
         <div key={idx} className="w-full flex justify-center my-[5px]">
           {idx === 2 && (
             <button
               onClick={onEnterPress}
               className="h-10 xxs:h-14 w-12 px-1 text-xs font-medium mx-[3.5px] rounded nm-flat-background-sm dark:nm-flat-background-dark-sm text-primary dark:text-primary-dark"
+              style={{ height: `${keyboardLetterHeight}px`, width: `${keyboardLetterWidth}px`, 'font-size': `${keyboardLetterHeight/4}px`}}
             >
               ENTER
             </button>
@@ -65,6 +67,7 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
               onClick={() => onKeyButtonPress(letter)}
               key={letter}
               className="h-10 xxs:h-14 w-[2rem] sm:w-10 mx-[3.5px] text-sm font-medium rounded-[4px] nm-flat-background-sm dark:nm-flat-background-dark-sm"
+              style={{ height: `${keyboardLetterHeight}px`, width: `${keyboardLetterWidth}px`, 'font-size': `${keyboardLetterHeight/2}px`}}
             >
               <div
                 className={`h-full w-full rounded-[3px] flex items-center justify-center ${getKeyStyle(
@@ -79,13 +82,14 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
             <button
               onClick={onDeletePress}
               className="h-10 xxs:h-14 w-12 flex items-center justify-center nm-flat-background-sm dark:nm-flat-background-dark-sm text-primary dark:text-primary-dark mx-[3.5px] text-sm  rounded"
+              style={{ height: `${keyboardLetterHeight}px`, width: `${keyboardLetterWidth}px`, 'font-size': `${keyboardLetterHeight/2}px`}}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                style={{ height: `${keyboardLetterHeight/2}px`, width: `${keyboardLetterWidth/2}px`}}
               >
                 <path
                   strokeLinecap="round"

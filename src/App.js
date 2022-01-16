@@ -23,18 +23,28 @@ const getRandomAnswer = () => {
   return answers[randomIndex].toUpperCase()
 }
 
-const useGridSize = () => {
-  const [size, setSize] = useState([0, 0])
+const useLetterSizes = () => {
+  const [size, setSize] = useState([0, 0, 0, 0])
   useLayoutEffect(() => {
     const updateSize = () => {
-      const innerh = window.innerHeight
-      const maxHeight = 400
-      const maxWidth = (maxHeight * 5) / 6
+      const h = window.innerHeight - 35
+      const w = window.innerWidth
 
-      const height = Math.min(maxHeight, innerh - 275)
-      const width = Math.min(maxWidth, (height * 5) / 6)
+      const hGrid = h*2/3
+      const wGrid = w
+      const hLetMax = (hGrid - 7*10) / 6
+      const wLetMax = (wGrid - 6*10) / 5
+      const hLet = Math.min(hLetMax, wLetMax)
+      const wLet = Math.min(hLetMax, wLetMax)
 
-      setSize([width, height])
+      const hKB = h - hGrid - (h/10) - 10
+      const wKB = w
+      const hKeyMax = (hKB - 2*10) / 3
+      const wKeyMax = (wKB - 11*3.5 - 2*25) / 10
+      const hKey = Math.min(hKeyMax, wKeyMax)
+      const wKey = Math.min(hKeyMax, wKeyMax)
+
+      setSize([wLet, hLet, wKey, hKey])
     }
     window.addEventListener('resize', updateSize)
     updateSize()
@@ -309,7 +319,7 @@ function App() {
     },
   }
 
-  const [widthGrid, heightGrid] = useGridSize()
+  const [gridLetterWidth, gridLetterHeight, keyboardLetterWidth, keyboardLetterHeight] = useLetterSizes()
 
   return (
     <div className={darkMode ? 'dark' : ''}>
@@ -336,7 +346,6 @@ function App() {
         <div className="flex items-center flex-col py-1">
           <div
             className="grid grid-cols-5 grid-rows-6 gap-x-[10px] gap-y-[10px]"
-            style={{ height: `${heightGrid}px`, width: `${widthGrid}px` }}
           >
             {board.map((row, rowNumber) =>
               row.map((letter, colNumber) => (
@@ -347,6 +356,7 @@ function App() {
                     colNumber,
                     letter
                   )} inline-flex items-center font-medium justify-center text-lg rounded-full`}
+                  style={{ height: `${gridLetterHeight}px`, width: `${gridLetterWidth}px`, 'font-size': `${gridLetterHeight/2}px`}}
                 >
                   {letter}
                 </span>
@@ -386,6 +396,8 @@ function App() {
             onEnterPress={onEnterPress}
             onDeletePress={onDeletePress}
             gameDisabled={gameState !== state.playing}
+            keyboardLetterWidth={keyboardLetterWidth}
+            keyboardLetterHeight={keyboardLetterHeight}
           />
         ) : (
           <div className="flex-1 flex pt-8 items-start justify-center">
